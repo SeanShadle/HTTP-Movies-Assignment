@@ -53,9 +53,16 @@ const App = () => {
       .catch(err => console.log(err));
   };
 
-  const routeToAdd = () => {
-    history.push(`/add-movie`)
-  }
+    const deleteMovie = id => {
+    axios
+      .delete(`http://localhost:5000/api/movies/${id}`)
+      .then(res => {
+        setMovieList(movieList.filter(movie => {
+          return movie.id !== res.data
+        }))
+        history.push("/");
+      })
+  };
 
   useEffect(() => {
     getMovieList();
@@ -70,7 +77,7 @@ const App = () => {
       </Route>
 
       <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList} />
+        <Movie addToSavedList={addToSavedList} deleteMovie={deleteMovie}/>
       </Route>
 
       <Route path="/update-movie/:id">
