@@ -74,7 +74,7 @@ const UpdateMovie = (props) => {
                 />
                 <div className="baseline" />
 
-                <button className="md-button form-button">Update</button>
+                <button>Update</button>
             </form>
         </div>
     );

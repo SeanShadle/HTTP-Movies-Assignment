@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Route, useHistory } from "react-router-dom";
+import { Route, NavLink, useHistory } from "react-router-dom";
 import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
 import axios from 'axios';
 import UpdateMovie from './Movies/UpdateMovie';
+import AddMovie from './Movies/AddMovie'
 
 const App = () => {
   const [savedList, setSavedList] = useState([]);
@@ -39,6 +40,23 @@ const App = () => {
       .catch(err => console.log(err));
   };
 
+  const addMovie = (data) => {
+    const newMovie = {...data, stars: data.stars.split(", ")};
+    axios
+      .post(`http://localhost:5000/api/movies`, newMovie)
+      .then(res => {
+        const tempList = [...movieList];
+        tempList.push(newMovie)
+        setMovieList(tempList);
+        history.push('/');
+      })
+      .catch(err => console.log(err));
+  };
+
+  const routeToAdd = () => {
+    history.push(`/add-movie`)
+  }
+
   useEffect(() => {
     getMovieList();
   }, []);
@@ -57,6 +75,10 @@ const App = () => {
 
       <Route path="/update-movie/:id">
         <UpdateMovie updateMovie = {updateMovie} />
+      </Route>
+
+      <Route path="/add-movie">
+        <AddMovie addMovie = {addMovie} />
       </Route>
     </>
   );
